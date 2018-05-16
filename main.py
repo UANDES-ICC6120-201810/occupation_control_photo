@@ -1,25 +1,46 @@
 import cv2
 import numpy
+import os
+import sys
+import datetime
+from uuid import getnode as get_mac
 
-URL = "rtsp://192.168.1.92:554"
-cam = cv2.VideoCapture(URL)
-i = 0
-file_generic_name = 'saved{}'
-while True:
+
+DEFAULT_IMG_FOLDER = '/home/img_buffer'
+
+
+def main(URL=None, path=None):
+    if URL is None:
+        exit(1)
+    if path is None:
+        path = DEFAULT_IMG_FOLDER
+    cam = cv2.VideoCapture(URL)
     ret, frame = cam.read()
-    try:
-        cv2.imshow('frame', frame)
-    except Exception:
-        print "Could not load frame, re-establishing connection"
-        cam.release()
-        print "camera connetion released"
-        cam = cv2.VideoCapture(URL)
-        print "camera connection established"
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        saved_file_name = '{}.png'.format(file_generic_name.format(i))
-        cv2.imwrite(saved_file_name, frame)
-        i += 1
-        print 'image saved as {}'.format(saved_file_name)
+    h, w, c = frame.shape
+    if h <= 0 or w <= 0:
+        exit(1)
+    
+    if not os.path.exists(path):
+        os.makedirs(path)
 
-cam.release()
-cv2.destroyAllWindows()
+    mac = get_mac()
+    date = datetime.datetime.now()
+    img_name = '{}/{}_{}.png'.format(path, mac, date.strftime('%Y%m%d%H%M'))
+    try:
+        cv2.imwrite(img_name, frame)
+    except:
+        exit(1)
+    cam.release()
+    exit(0)
+
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        exit(1)
+    else:
+        URL = sys.argv[1]
+        path = None
+        if len(sys.argv) == 3:
+            path = sys-argv[2]
+        main(URL=URL, path=path)
+
