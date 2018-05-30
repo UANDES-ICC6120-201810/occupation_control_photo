@@ -12,6 +12,7 @@ echo Requirements installed successfuly
 echo Creting required folders and files
 cd "$parent_folder"
 touch registers.log
+touch /var/log/picture.log
 mkdir ../img_folder
 echo required folders and files created
 
