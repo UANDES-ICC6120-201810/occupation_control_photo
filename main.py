@@ -7,7 +7,7 @@ import datetime
 from uuid import getnode as get_mac
 
 
-DEFAULT_IMG_FOLDER = '/home/pi/img_buffer'
+DEFAULT_IMG_FOLDER = '/home/pi/img_folder'
 
 
 def main(URL=None, path=None):
