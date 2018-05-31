@@ -57,9 +57,9 @@ if __name__ == "__main__":
         exit(1)
     else:
         URL = sys.argv[1]
-        path = None
+        directory = None
         if len(sys.argv) == 3:
-            path = sys-argv[2]
-        main(URL=URL, path=path)
+            directory = sys-argv[2]
+        main(URL=URL, directory=directory)
     print "OK"
     exit(0)
