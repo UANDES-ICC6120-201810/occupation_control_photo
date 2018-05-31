@@ -33,7 +33,7 @@ def main(URL=None, directory=None):
     mac = get_mac()
     date = datetime.datetime.now()
     img_file = '{mac}_{date}.png'.format(mac=mac, date=date.strftime('%Y%m%d%H%M'))
-    img_path = '{directory}/{file}'.format(directory=path, file=img_file)
+    img_path = '{directory}/{file}'.format(directory=directory, file=img_file)
     try:
         cv2.imwrite(img_path, frame)
     except:
