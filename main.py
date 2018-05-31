@@ -42,9 +42,9 @@ def main(URL=None, directory=None):
     session = boto3.session.Session()
     client = session.client('s3',
                             region_name='nyc3',
-                            endpoint_url='https://zapo-storage.nyc3.digitaloceanspaces.com'
-                            aws_access_key_id=''
-                            aws_secret_access_key='')
+                            endpoint_url='https://zapo-storage.nyc3.digitaloceanspaces.com',
+                            aws_access_key_id='JBLMV4KWTMQFT6REUZ2Z',
+                            aws_secret_access_key='jj/3LqrpnS9EAQQYNHHY536u8we9ugQOBcTOG+7E/Cs')
     client.upload_file(img_path,
                        'zapo-storage',
                        img_file)
