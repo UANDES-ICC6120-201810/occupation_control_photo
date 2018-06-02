@@ -32,7 +32,7 @@ def main(URL=None, directory=None):
 
     mac = get_mac()
     date = datetime.datetime.now()
-    img_file = '{mac}_{date}.png'.format(mac=mac, date=date.strftime('%Y%m%d%H%M'))
+    img_file = '{date}.png'.format(date=date.strftime('%Y%m%d%H%M'))
     img_path = '{directory}/{file}'.format(directory=directory, file=img_file)
     try:
         cv2.imwrite(img_path, frame)
@@ -46,7 +46,7 @@ def main(URL=None, directory=None):
                             aws_access_key_id='JBLMV4KWTMQFT6REUZ2Z',
                             aws_secret_access_key='jj/3LqrpnS9EAQQYNHHY536u8we9ugQOBcTOG+7E/Cs')
     client.upload_file(img_path,
-                       'zapo-storage',
+                       'occupation_images/{mac}'.format(mac=mac),
                        img_file)
     cam.release()
 
