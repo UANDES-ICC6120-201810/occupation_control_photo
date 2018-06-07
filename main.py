@@ -6,6 +6,7 @@ import sys
 import datetime
 import boto3
 from uuid import getnode as get_mac
+from settings import *
 
 
 DEFAULT_IMG_FOLDER = '/home/pi/img_folder'
@@ -41,13 +42,15 @@ def main(URL=None, directory=None):
         exit(1)
     session = boto3.session.Session()
     client = session.client('s3',
-                            region_name='nyc3',
-                            endpoint_url='https://zapo-storage.nyc3.digitaloceanspaces.com',
-                            aws_access_key_id='JBLMV4KWTMQFT6REUZ2Z',
-                            aws_secret_access_key='jj/3LqrpnS9EAQQYNHHY536u8we9ugQOBcTOG+7E/Cs')
+                            region_name='{region}'.format(region=AWS_REGION),
+                            endpoint_url='https://{bucket}.{url}'.format(bucket=AWS_STORAGE_BUCKET_NAME,
+                                                                         url=AWS_S3_ENDPOINT_URL),
+                            aws_access_key_id='{access_key}'.format(access_key=AWS_ACCESS_KEY_ID),
+                            aws_secret_access_key='{secret_key}'.format(secret_key=AWS_SECRET_ACCESS_KEY))
     client.upload_file(img_path,
-                       'occupation_images/{mac}'.format(mac=mac),
-                       img_file)
+                       '{folder}/{mac}'.format(folder=AWS_LOCATION, mac=mac),
+                       img_file,
+                       ExtraArgs = {'ACL': 'public-read'}) # TODO: Check if last argument is propertly setted
     cam.release()
 
 
