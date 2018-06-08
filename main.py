@@ -48,8 +48,8 @@ def main(URL=None, directory=None):
                             aws_access_key_id='{access_key}'.format(access_key=AWS_ACCESS_KEY_ID),
                             aws_secret_access_key='{secret_key}'.format(secret_key=AWS_SECRET_ACCESS_KEY))
     client.upload_file(img_path,
-                       '{folder}/{mac}'.format(folder=AWS_LOCATION, mac=mac),
-                       img_file,
+                       '{bucket}'.format(bucket=AWS_STORAGE_BUCKET_NAME),
+                       '{folder}/{mac}/{filename}'.format(folder=AWS_LOCATION, mac=mac, filename=img_file),
                        ExtraArgs = {'ACL': 'public-read'}) # TODO: Check if last argument is propertly setted
     cam.release()
 
