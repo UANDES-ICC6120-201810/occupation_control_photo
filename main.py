@@ -76,7 +76,7 @@ def main(URL=None, directory=None):
         'source_filename': '{filename}'.format(filename=img_file)
     }
     response = requests.post(
-        url='http://proyectozapo.herokuapp.com/api/v1/ocupation_event',
+        url='http://proyectozapo.herokuapp.com/api/v1/occupation_event',
         headers=headers,
         data=body
     )
