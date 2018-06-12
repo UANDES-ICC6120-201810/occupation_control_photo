@@ -17,6 +17,7 @@ echo installing python dependencies ...
 sudo virtualenv env
 . env/bin/activate
 sudo pip install numpy || echo "Failed to install numpy" exit
+sudo pip install requests || echo "Failed to install requests" exit
 sudo pip install boto3 || echo "Failed to install boto3" exit
 sudo apt-get install python-opencv || echo "Failed to install OpenCV for python"
 echo Copying files to folder ...
@@ -33,3 +34,5 @@ sudo crontab -l | sed "/run.sh/ c*/5 * * * * sudo sh $directory/run.sh > $direct
 sudo service cron reload
 sudo service cron restart
 echo Jos setted up correctly
+
+sudo ip route del default via 192.168.1.1 dev eth0
