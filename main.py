@@ -76,13 +76,14 @@ def main(URL=None, directory=None):
         'source_filename': '{filename}'.format(filename=img_file)
     }
     response = requests.post(
-        url='http://http://proyectozapo.herokuapp.com/api/v1/ocupation_event',
+        url='http://proyectozapo.herokuapp.com/api/v1/ocupation_event',
         headers=headers,
         data=body
     )
 
     if not response.ok:
-        print "Could not send request to API"
+        print "Could not send request to API: {status}".format(status=response)
+        print response.content
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
