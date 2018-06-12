@@ -5,6 +5,7 @@ import os
 import sys
 import datetime
 import boto3
+import requests
 from uuid import getnode as get_mac
 from settings import *
 
@@ -27,7 +28,9 @@ def main(URL=None, directory=None):
     if h <= 0 or w <= 0:
         print "frame size 0"
         exit(1)
-    
+
+    cam.release()
+
     if not os.path.exists(directory):
         os.makedirs(directory)
 
@@ -35,24 +38,51 @@ def main(URL=None, directory=None):
     date = datetime.datetime.now()
     img_file = '{date}.png'.format(date=date.strftime('%Y%m%d%H%M'))
     img_path = '{directory}/{file}'.format(directory=directory, file=img_file)
+
+    # Saving frame
     try:
         cv2.imwrite(img_path, frame)
     except:
         print "Could not write file"
         exit(1)
-    session = boto3.session.Session()
-    client = session.client('s3',
-                            region_name='{region}'.format(region=AWS_REGION),
-                            endpoint_url='https://{bucket}.{url}'.format(bucket=AWS_STORAGE_BUCKET_NAME,
-                                                                         url=AWS_S3_ENDPOINT_URL),
-                            aws_access_key_id='{access_key}'.format(access_key=AWS_ACCESS_KEY_ID),
-                            aws_secret_access_key='{secret_key}'.format(secret_key=AWS_SECRET_ACCESS_KEY))
-    client.upload_file(img_path,
-                       '{folder}/{mac}'.format(folder=AWS_LOCATION, mac=mac),
-                       img_file,
-                       ExtraArgs = {'ACL': 'public-read'}) # TODO: Check if last argument is propertly setted
-    cam.release()
 
+    # Uploading image to digitalocean storage
+    try:
+        session = boto3.session.Session()
+        client = session.client('s3',
+                                region_name='{region}'.format(region=AWS_REGION),
+                                endpoint_url='https://{bucket}.{url}'.format(bucket=AWS_STORAGE_BUCKET_NAME,
+                                                                             url=AWS_S3_ENDPOINT_URL),
+                                aws_access_key_id='{access_key}'.format(access_key=AWS_ACCESS_KEY_ID),
+                                aws_secret_access_key='{secret_key}'.format(secret_key=AWS_SECRET_ACCESS_KEY))
+        client.upload_file(img_path,
+                       '{bucket}'.format(bucket=AWS_STORAGE_BUCKET_NAME),
+                       '{mac}/{filename}'.format(folder=AWS_LOCATION, mac=mac, filename=img_file),
+                       ExtraArgs = {'ACL': 'public-read'})
+    except:
+        print "Could not upload to digitalocean spaces."
+        exit(1)
+
+    # Sending request to API
+    token = 'eyJhbGciOiJIUzI1NiJ9.eyJhY2Nlc3NfcG9pbnRfaWQiOjYsImV4cCI6MTUyODY2NTQzOX0.S6qgT8bnGOl9-6hrZ1-CtCSCpmXEeoFD6Om_Fk3EUKE'
+    headers = {
+        'Authorization': str('Bearer ' + token)
+    }
+    body = {
+        'source_endpoint': 'https://{bucket}.{url}'.format(bucket=AWS_STORAGE_BUCKET_NAME,
+                                                           url=AWS_S3_ENDPOINT_URL),
+        'source_bucket': '{bucket}'.format(bucket=AWS_LOCATION),
+        'source_folder': '{mac}'.format(mac=mac),
+        'source_filename': '{filename}'.format(filename=img_file)
+    }
+    response = requests.post(
+        url='http://http://proyectozapo.herokuapp.com/api/v1/ocupation_event',
+        headers=headers,
+        data=body
+    )
+
+    if not response.ok:
+        print "Could not send request to API"
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:

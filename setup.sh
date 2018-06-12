@@ -13,15 +13,21 @@ echo Requirements installed successfuly
 echo Creting required folders ...
 sudo mkdir $directory
 cd $directory
+
 echo installing python dependencies ...
 sudo pip install numpy || echo "Failed to install numpy" || exit
 sudo pip install boto3 || echo "Failed to install boto3" || exit
+sudo pip install requests || echo "Failed to install requests" exit
+sudo apt-get install python-opencv || echo "Failed to install OpenCV for python"
+
 echo Copying files to folder ...
 sudo cp $source_folder/run.sh $directory/run.sh
 sudo cp $source_folder/main.py $directory/main.py
 sudo cp $source_folder/settings.py $directory/settings.py
+
 echo creating registers.log ...
 sudo touch registers.log
+
 echo Creating images folder ...
 sudo mkdir img_folder
 echo required folders and files created
@@ -31,3 +37,5 @@ sudo crontab -l | sed "/run.sh/ c*/5 * * * * sudo sh $directory/run.sh > $direct
 sudo service cron reload
 sudo service cron restart
 echo Jos setted up correctly
+
+sudo ip route del default via 192.168.1.1 dev eth0
