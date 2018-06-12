@@ -1,5 +1,7 @@
 #!/bin/bash
 
+sudo ip route del default via 192.168.1.1 dev eth0
+
 source_folder=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 directory="/usr/local/bin/occupation_module"
 
@@ -37,5 +39,3 @@ sudo crontab -l | sed "/run.sh/ c*/5 * * * * sudo sh $directory/run.sh > $direct
 sudo service cron reload
 sudo service cron restart
 echo Jos setted up correctly
-
-sudo ip route del default via 192.168.1.1 dev eth0
