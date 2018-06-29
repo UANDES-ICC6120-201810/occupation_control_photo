@@ -72,7 +72,7 @@ def main(URL=None, directory=None):
         exit(1)
 
     # Sending request to API
-    token = 'eyJhbGciOiJIUzI1NiJ9.eyJhY2Nlc3NfcG9pbnRfaWQiOjEwLCJleHAiOjE1Mjg5MjU5NDV9.wqQ73Z8ts0sXo10NcUb7xzN3CUD1claDk-2aZ2ofheU'
+    token = 'eyJhbGciOiJIUzI1NiJ9.eyJidXNfc3RvcF9jb2RlIjoiUEMxMDQ5In0.ys4OrX8lMe7h3wPIhv5Du7WFUDbxC5fszhumADKdlIc'
     headers = {
         'Authorization': str('Bearer ' + token)
     }
