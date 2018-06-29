@@ -102,7 +102,7 @@ if __name__ == "__main__":
         print "required at least one arg"
         exit(1)
     else:
-        URL = sys.argv[1]
+        URL = "rtsp://192.168.1.190:554"
         directory = None
         if len(sys.argv) == 3:
             directory = sys.argv[2]
