@@ -9,10 +9,10 @@ directory="/usr/local/bin/occupation_module"
 echo Installing module dependencies...
 apt-get update && sudo apt-get -y upgrade
 apt-get install python python-pip || echo "Python installation Failed" || exit
-apt-get install python-opencv || echo "Failed to install OpenCV for python" || exit
 echo Requirements installed successfuly
 
 echo Creting required folders ...
+rm -rf $directory
 mkdir $directory
 cd $directory
 
@@ -26,6 +26,7 @@ echo Copying files to folder ...
 cp $source_folder/run.sh $directory/run.sh
 cp $source_folder/main.py $directory/main.py
 cp $source_folder/settings.py $directory/settings.py
+cp $source_folder/crontab $directory/crontab
 
 echo creating registers.log ...
 touch registers.log
@@ -36,7 +37,7 @@ echo required folders and files created
 
 echo Setting cron job default every 5 minutes
 echo "Implementing new crontab"
-crontab /home/pi/picture_manager/crontab
+crontab $directory/crontab
 service cron reload
 service cron restart
 echo "Jos implemented correctly"
