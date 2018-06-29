@@ -4,6 +4,7 @@ import numpy
 import os
 import sys
 import datetime
+import time
 import boto3
 import requests
 from uuid import getnode as get_mac
@@ -16,18 +17,18 @@ DEFAULT_IMG_FOLDER = '/home/pi/img_folder'
 def main(URL=None, directory=None):
     if URL is None:
         print "None URL"
-        exit(1)
+        return
     if directory is None:
         directory = DEFAULT_IMG_FOLDER
     cam = cv2.VideoCapture(URL)
     ret, frame = cam.read()
     if frame is None:
         print "None frame"
-        exit(1)
+        return
     h, w, c = frame.shape
     if h <= 0 or w <= 0:
         print "frame size 0"
-        exit(1)
+        return
 
     cam.release()
 
@@ -44,7 +45,7 @@ def main(URL=None, directory=None):
         cv2.imwrite(img_path, frame)
     except:
         print "Could not write file"
-        exit(1)
+        return
 
     # Uploading image to digitalocean storage
     try:
@@ -69,7 +70,7 @@ def main(URL=None, directory=None):
                        ExtraArgs = {'ACL': 'public-read'})
     except:
         print "Could not upload to digitalocean spaces."
-        exit(1)
+        return
 
     # Sending request to API
     token = 'eyJhbGciOiJIUzI1NiJ9.eyJidXNfc3RvcF9jb2RlIjoiUEMxMDQ5In0.ys4OrX8lMe7h3wPIhv5Du7WFUDbxC5fszhumADKdlIc'
@@ -95,6 +96,7 @@ def main(URL=None, directory=None):
     if not response.ok:
         print "Could not send request to API: {status}".format(status=response)
         print response.content
+        return
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
@@ -104,7 +106,9 @@ if __name__ == "__main__":
         URL = sys.argv[1]
         directory = None
         if len(sys.argv) == 3:
-            directory = sys-argv[2]
-        main(URL=URL, directory=directory)
-    print "OK"
+            directory = sys.argv[2]
+        while True:
+            main(URL=URL, directory=directory)
+            print "OK"
+            time.sleep(60*5)
     exit(0)
