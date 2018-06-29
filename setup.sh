@@ -35,7 +35,11 @@ sudo mkdir img_folder
 echo required folders and files created
 
 echo Setting cron job default every 5 minutes
-sudo crontab -l | sed "/run.sh/ c*/5 * * * * sudo sh $directory/run.sh > $directory/registers.log 2>&1" | sudo crontab -
+sudo crontab -l > crontab.tmp
+sudo echo "@reboot source /home/pi/picture_manager/setup.sh" >>> crontab.tmp
+sudo echo "*/5 * * * * sh $directory/run.sh > $directory/registers.log 2>&1" >>> crontab.tmp
+sudo crontab crontab.tmp
+sudo rm crontab.tmp
 sudo service cron reload
 sudo service cron restart
 echo Jos setted up correctly
