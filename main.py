@@ -49,12 +49,20 @@ def main(URL=None, directory=None):
     # Uploading image to digitalocean storage
     try:
         session = boto3.session.Session()
-        client = session.client('s3',
-                                region_name='{region}'.format(region=AWS_REGION),
-                                endpoint_url='https://{bucket}.{url}'.format(bucket=AWS_STORAGE_BUCKET_NAME,
-                                                                             url=AWS_S3_ENDPOINT_URL),
-                                aws_access_key_id='{access_key}'.format(access_key=AWS_ACCESS_KEY_ID),
-                                aws_secret_access_key='{secret_key}'.format(secret_key=AWS_SECRET_ACCESS_KEY))
+        client = session.client(
+            's3',
+            region_name='{region}'.format(region=AWS_REGION),
+            endpoint_url='https://{bucket}.{url}'.format(
+                bucket=AWS_STORAGE_BUCKET_NAME,
+                url=AWS_S3_ENDPOINT_URL
+            ),
+            aws_access_key_id='{access_key}'.format(
+                access_key=AWS_ACCESS_KEY_ID
+            ),
+            aws_secret_access_key='{secret_key}'.format(
+                secret_key=AWS_SECRET_ACCESS_KEY
+            )
+        )
         client.upload_file(img_path,
                        '{folder}'.format(folder=AWS_LOCATION),
                        '{mac}/{filename}'.format(mac=mac, filename=img_file),
@@ -68,9 +76,12 @@ def main(URL=None, directory=None):
     headers = {
         'Authorization': str('Bearer ' + token)
     }
+    endpoint_format = 'https://{bucket}.{url}'
     body = {
-        'source_endpoint': 'https://{bucket}.{url}'.format(bucket=AWS_STORAGE_BUCKET_NAME,
-                                                           url=AWS_S3_ENDPOINT_URL),
+        'source_endpoint': endpoint_format.format(
+            bucket=AWS_STORAGE_BUCKET_NAME,
+            url=AWS_S3_ENDPOINT_URL
+        ),
         'source_bucket': '{bucket}'.format(bucket=AWS_LOCATION),
         'source_folder': '{mac}'.format(mac=mac),
         'source_filename': '{filename}'.format(filename=img_file)
