@@ -1,7 +1,6 @@
 #!/usr/bin/python
 import cv2
 import os
-import sys
 import datetime
 import time
 import boto3
@@ -99,7 +98,7 @@ def main(URL=None):
 if __name__ == "__main__":
     URL = "rtsp://192.168.1.190:554"
     while True:
-        main(URL=URL, directory=directory)
+        main(URL=URL)
         print "OK"
         time.sleep(60*5)
     exit(0)
