@@ -7,39 +7,36 @@ directory="/usr/local/bin/occupation_module"
 
 # Setup for stop bus occupation module of ZAPO proyect
 echo Installing module dependencies...
-sudo apt-get update && sudo apt-get -y upgrade
-sudo apt-get install python python-pip || echo "Python installation Failed" || exit
-sudo apt-get install python-opencv || echo "Failed to install OpenCV for python" || exit
+apt-get update && sudo apt-get -y upgrade
+apt-get install python python-pip || echo "Python installation Failed" || exit
+apt-get install python-opencv || echo "Failed to install OpenCV for python" || exit
 echo Requirements installed successfuly
 
 echo Creting required folders ...
-sudo mkdir $directory
+mkdir $directory
 cd $directory
 
 echo installing python dependencies ...
-sudo pip install numpy || echo "Failed to install numpy" || exit
-sudo pip install boto3 || echo "Failed to install boto3" || exit
-sudo pip install requests || echo "Failed to install requests" exit
-sudo apt-get install python-opencv || echo "Failed to install OpenCV for python"
+pip install numpy || echo "Failed to install numpy" || exit
+pip install boto3 || echo "Failed to install boto3" || exit
+pip install requests || echo "Failed to install requests" exit
+apt-get install python-opencv || echo "Failed to install OpenCV for python"
 
 echo Copying files to folder ...
-sudo cp $source_folder/run.sh $directory/run.sh
-sudo cp $source_folder/main.py $directory/main.py
-sudo cp $source_folder/settings.py $directory/settings.py
+cp $source_folder/run.sh $directory/run.sh
+cp $source_folder/main.py $directory/main.py
+cp $source_folder/settings.py $directory/settings.py
 
 echo creating registers.log ...
-sudo touch registers.log
+touch registers.log
 
 echo Creating images folder ...
-sudo mkdir img_folder
+mkdir img_folder
 echo required folders and files created
 
 echo Setting cron job default every 5 minutes
-sudo crontab -l > crontab.tmp
-sudo echo "@reboot source /home/pi/picture_manager/setup.sh" >>> crontab.tmp
-sudo echo "*/5 * * * * sh $directory/run.sh > $directory/registers.log 2>&1" >>> crontab.tmp
-sudo crontab crontab.tmp
-sudo rm crontab.tmp
-sudo service cron reload
-sudo service cron restart
-echo Jos setted up correctly
+echo "Implementing new crontab"
+crontab /home/pi/picture_manager/crontab
+service cron reload
+service cron restart
+echo "Jos implemented correctly"
