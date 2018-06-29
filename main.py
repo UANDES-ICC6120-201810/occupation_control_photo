@@ -13,12 +13,11 @@ from settings import *
 DEFAULT_IMG_FOLDER = '/home/pi/img_folder'
 
 
-def main(URL=None, directory=None):
+def main(URL=None):
     if URL is None:
         print "None URL"
         return
-    if directory is None:
-        directory = DEFAULT_IMG_FOLDER
+    directory = DEFAULT_IMG_FOLDER
     cam = cv2.VideoCapture(URL)
     ret, frame = cam.read()
     if frame is None:
@@ -98,16 +97,9 @@ def main(URL=None, directory=None):
         return
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print "required at least one arg"
-        exit(1)
-    else:
-        URL = "rtsp://192.168.1.190:554"
-        directory = None
-        if len(sys.argv) == 3:
-            directory = sys.argv[2]
-        while True:
-            main(URL=URL, directory=directory)
-            print "OK"
-            time.sleep(60*5)
+    URL = "rtsp://192.168.1.190:554"
+    while True:
+        main(URL=URL, directory=directory)
+        print "OK"
+        time.sleep(60*5)
     exit(0)
