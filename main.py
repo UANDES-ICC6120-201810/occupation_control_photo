@@ -70,7 +70,7 @@ def main(URL=None):
         return
 
     # Sending request to API
-    token = 'eyJhbGciOiJIUzI1NiJ9.eyJidXNfc3RvcF9jb2RlIjoiUEMxMDQ5In0.ys4OrX8lMe7h3wPIhv5Du7WFUDbxC5fszhumADKdlIc'
+    token = 'eyJhbGciOiJIUzI1NiJ9.eyJidXNfc3RvcF9jb2RlIjoiUEM2MjEifQ.kAbz6orY0Er1sZmKrPfMjzYm36cW3wiO_sYyNK43rKk'
     headers = {
         'Authorization': str('Bearer ' + token)
     }
